@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hôtel Le Fut Lyon - Nice</title>
+  <style>
+    /* Base Styles */
+    :root {
+      --primary-color: #0d47a1;
+      --secondary-color: #f5f5f5;
+      --accent-color: #ffb300;
+      --text-color: #333;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+      background-color: #fafafa;
+      line-height: 1.6;
+    }
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header h1 { margin: 0; font-size: 2.2rem; }
+    header p { margin: 0.5rem 0 0; font-style: italic; opacity: 0.9; }
+
+    nav {
+      background-color: #1565c0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    nav a:hover { background-color: #0d47a1; }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 5px;
+    }
+    
+    /* Image Styles */
+    .hotel-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .img-source {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 4px;
+      display: block;
+      text-align: right;
+    }
+
+    /* Amenities Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .grid-item {
+      background: var(--secondary-color);
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    /* Review Card Styles */
+    .review {
+      border-left: 4px solid var(--accent-color);
+      background: #fff8e1;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    .review-author { font-weight: bold; margin-bottom: 5px; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #222;
+      color: white;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app"></div>
+
+  <script>
+    // --- HOTEL DATA OBJECT ---
+    const hotelData = {
+      name: "Hôtel Le Riviera",
+      city: "Nice",
+      country: "la France",
+      // Geographic Prepositions Requirement: "à Nice", "en France"
+      welcomeMessage: "Bienvenue à l'Hôtel Le Riviera, à Nice, en France !",
+      intro: "Découvrez l'élégance méditerranéenne dans un cadre luxueux et chaleureux. Situé idéalement au cœur de la Côte d'Azur, notre hôtel vous offre un séjour inoubliable avec des prestations d'exception et une vue imprenable sur la mer.",
+      image: {
+        url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
+        source: "Source image: Unsplash (Photo par Stefan Stefancik)"
+      },
+      stats: {
+        floors: 5,
+        rooms: 85
+      },
+      // At least 4 room amenities
+      roomAmenities: [
+        { name: "Climatisation moderne", desc: "Climatisation individuelle dans chaque chambre pour votre confort absolu." },
+        { name: "Salle de bain privée", desc: "Equipée d'une douche à l'italienne, sèche-cheveux et produits d'accueil bios." },
+        { name: "Balcon privé", desc: "Espace extérieur meublé pour admirer le paysage méditerranéen." },
+        { name: "Lit King-Size super confortable", desc: "Literie haut de gamme pour garantir des nuits parfaitement paisibles." },
+        { name: "Vue panoramique sur la mer", desc: "Une vue magnifique et directe sur la Baie des Anges." }
+      ],
+      // At least 4 physical property amenities (with hours/meal details)
+      hotelAmenities: [
+        { name: "Piscine sur le toit", details: "Ouverte tous les jours de 8h00 à 20h00 avec bar rafraîchissant." },
+        { name: "Restaurant 'Le Méditerranée'", details: "Service du petit-déjeuner buffet complet de 7h00 à 10h30 et dîner gastronomique." },
+        { name: "Réception 24h/24", details: "Personnel multilingue disponible à tout moment pour vous assister." },
+        { name: "Jardin tropical & Terrasse", details: "Un havre de paix accessible toute la journée pour se détendre à l'ombre des palmiers." }
+      ],
+      // 3 nearby attractions using location prepositions & transit details
+      attractions: [
+        { 
+          name: "La Promenade des Anglais", 
+          transit: "Située juste **en face de** l'hôtel (à seulement 2 minutes **à pied**)." 
+        },
+        { 
+          name: "Le Vieux Nice (Vieille ville)", 
+          transit: "Facilement accessible **en bus** (ligne 12) ou à 10 minutes **à pied** de nos portes." 
+        },
+        { 
+          name: "La Colline du Château", 
+          transit: "Située **près du** port, accessible en 15 minutes **par le tramway** (Ligne 2, station à côté de l'hôtel)." 
+        }
+      ],
+      // Two 2+ line customer reviews (includes adverbs/comparatives)
+      reviews: [
+        {
+          author: "Sophie L. (Avis Positif)",
+          text: "Notre séjour était absolument merveilleux ! Les chambres sont nettement plus spacieuses que dans les autres hôtels de la ville, et le personnel sert le meilleur petit-déjeuner de Nice très chaleureusement chaque matin."
+        },
+        {
+          author: "Marc D. (Avis Mitigé/Négatif)",
+          text: "L'emplacement est parfait et le jardin est magnifique, mais le centre de remise en forme fonctionne plus lentement que prévu pendant les heures de pointe. Le service au restaurant reste néanmoins extrêmement agréable."
+        }
+      ]
+    };
+
+    // --- JAVASCRIPT RENDER ENGINE ---
+    function renderWebsite() {
+      const app = document.getElementById('app');
+
+      app.innerHTML = `
+        <header>
+          <h1>${hotelData.welcomeMessage}</h1>
+          <p>${hotelData.stats.floors} étages | ${hotelData.stats.rooms} chambres élégantes</p>
+        </header>
+
+        <nav>
+          <a href="#intro">Aperçu</a>
+          <a href="#chambres">Chambres</a>
+          <a href="#services">Services</a>
+          <a href="#attractions">Attractions</a>
+          <a href="#avis">Avis Clients</a>
+        </nav>
+
+        <div class="container">
+          <!-- Intro Section -->
+          <section id="intro" class="card">
+            <h2>À propos de notre hôtel</h2>
+            <img class="hotel-img" src="${hotelData.image.url}" alt="Hôtel Le Riviera">
+            <span class="img-source">${hotelData.image.source}</span>
+            <p style="font-size: 1.1rem; margin-top: 15px;">${hotelData.intro}</p>
+          </section>
+
+          <!-- Room Amenities Section -->
+          <section id="chambres" class="card">
+            <h2>Chambres & Équipements</h2>
+            <p>Toutes nos chambres disposent des équipements suivants pour votre séjour :</p>
+            <div class="grid">
+              ${hotelData.roomAmenities.map(item => `
+                <div class="grid-item">
+                  <strong>${item.name}</strong>
+                  <p style="font-size:0.9rem; margin: 5px 0 0 0;">${item.desc}</p>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+
+          <!-- Property Amenities Section -->
+          <section id="services" class="card">
+            <h2>Services & Équipements de l'Hôtel</h2>
+            <div class="grid">
+              ${hotelData.hotelAmenities.map(item => `
+                <div class="grid-item">
+                  <strong>${item.name}</strong>
+                  <p style="font-size:0.9rem; margin: 5px 0 0 0;">${item.details}</p>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+
+          <!-- Nearby Attractions Section -->
+          <section id="attractions" class="card">
+            <h2>Attractions à proximité & Accès</h2>
+            <ul>
+              ${hotelData.attractions.map(att => `
+                <li style="margin-bottom: 10px;">
+                  <strong>${att.name}</strong> : ${att.transit}
+                </li>
+              `).join('')}
+            </ul>
+          </section>
+
+          <!-- Customer Reviews Section -->
+          <section id="avis" class="card">
+            <h2>Avis de nos clients</h2>
+            ${hotelData.reviews.map(rev => `
+              <div class="review">
+                <div class="review-author">${rev.author}</div>
+                <div>"${rev.text}"</div>
+              </div>
+            `).join('')}
+          </section>
+        </div>
+
+        <footer>
+          <p>&copy; 2025 ${hotelData.name} - ${hotelData.city}, ${hotelData.country}. Tous droits réservés.</p>
+        </footer>
+      `;
+    }
+
+    // Run render function on page load
+    document.addEventListener('DOMContentLoaded', renderWebsite);
+  </script>
+</body>
+</html>
